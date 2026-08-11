@@ -838,6 +838,37 @@ require('lazy').setup({
       -- - sr)'  - [S]urround [R]eplace [)] [']
       require('mini.surround').setup()
 
+      -- Personal start screen, shown when Neovim opens without a file.
+      local starter = require 'mini.starter'
+      starter.setup {
+        evaluate_single = true,
+        header = table.concat({
+          '███╗   ██╗██╗   ██╗██╗███╗   ███╗',
+          '████╗  ██║██║   ██║██║████╗ ████║',
+          '██╔██╗ ██║██║   ██║██║██╔████╔██║',
+          '██║╚██╗██║╚██╗ ██╔╝██║██║╚██╔╝██║',
+          '██║ ╚████║ ╚████╔╝ ██║██║ ╚═╝ ██║',
+          '╚═╝  ╚═══╝  ╚═══╝  ╚═╝╚═╝     ╚═╝',
+        }, '\n'),
+        items = {
+          { name = 'Find files', action = 'Telescope find_files', section = 'Actions' },
+          { name = 'Recent files', action = 'Telescope oldfiles', section = 'Actions' },
+          { name = 'Search text', action = 'Telescope live_grep', section = 'Actions' },
+          {
+            name = 'Edit config',
+            action = 'edit ' .. vim.fn.fnameescape(vim.fn.stdpath 'config' .. '/init.lua'),
+            section = 'Actions',
+          },
+          { name = 'Manage plugins', action = 'Lazy', section = 'Actions' },
+          { name = 'Quit', action = 'qa', section = 'Actions' },
+        },
+        footer = 'Kahnix · Neovim',
+        content_hooks = {
+          starter.gen_hook.adding_bullet '› ',
+          starter.gen_hook.aligning('center', 'center'),
+        },
+      }
+
       -- Simple and easy statusline.
       --  You could remove this setup call if you don't like it,
       --  and try some other statusline plugin
