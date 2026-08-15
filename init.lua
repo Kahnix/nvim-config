@@ -676,6 +676,17 @@ require('lazy').setup({
           }
         end
       end,
+      formatters = {
+        biome = {
+          require_cwd = true,
+        },
+        oxfmt = {
+          require_cwd = true,
+        },
+        prettier = {
+          require_cwd = true,
+        },
+      },
       formatters_by_ft = {
         lua = { 'stylua' },
         javascript = { 'biome', 'oxfmt', 'prettier', stop_after_first = true },
