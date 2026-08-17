@@ -36,6 +36,12 @@ vim.o.breakindent = true
 -- Save undo history
 vim.o.undofile = true
 
+-- Indent defaults
+vim.opt.expandtab = true
+vim.opt.shiftwidth = 2
+vim.opt.tabstop = 2
+vim.opt.softtabstop = 2
+
 -- Case-insensitive searching UNLESS \C or one or more capital letters in the search term
 vim.o.ignorecase = true
 vim.o.smartcase = true
@@ -379,6 +385,34 @@ require('lazy').setup({
     },
   },
   {
+    -- Give language servers access to code embedded in another filetype.
+    -- This lets vtsls understand JavaScript inside an HTML <script> tag.
+    'jmbuhr/otter.nvim',
+    dependencies = { 'nvim-treesitter/nvim-treesitter' },
+    ft = 'html',
+    config = function()
+      local otter = require 'otter'
+      otter.setup {}
+
+      local function activate_javascript(bufnr)
+        vim.api.nvim_buf_call(bufnr, function()
+          otter.activate { 'javascript' }
+        end)
+      end
+
+      vim.api.nvim_create_autocmd('FileType', {
+        group = vim.api.nvim_create_augroup('config-otter-html', { clear = true }),
+        pattern = 'html',
+        callback = function(event)
+          activate_javascript(event.buf)
+        end,
+      })
+
+      -- The FileType event that loaded this plugin has already happened.
+      activate_javascript(0)
+    end,
+  },
+  {
     -- Main LSP Configuration
     'neovim/nvim-lspconfig',
     dependencies = {
@@ -576,6 +610,7 @@ require('lazy').setup({
       local servers = {
         -- clangd = {},
         gopls = {},
+        html = {},
         -- pyright = {},
         rust_analyzer = {},
         vtsls = {},
@@ -903,7 +938,7 @@ require('lazy').setup({
     -- [[ Configure Treesitter ]] See `:help nvim-treesitter`
     config = function()
       local treesitter = require 'nvim-treesitter'
-      local ensure_installed = { 'bash', 'c', 'diff', 'html', 'lua', 'luadoc', 'markdown', 'markdown_inline', 'nix', 'query', 'vim', 'vimdoc' }
+      local ensure_installed = { 'bash', 'c', 'css', 'diff', 'html', 'javascript', 'lua', 'luadoc', 'markdown', 'markdown_inline', 'nix', 'query', 'vim', 'vimdoc' }
       local indent_disabled = { ruby = true, javascript = true, typescript = true }
       local installing = {}
       local available = {}
