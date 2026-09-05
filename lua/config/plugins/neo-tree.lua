@@ -11,7 +11,19 @@ return {
   },
   lazy = false,
   keys = {
-    { '\\', ':Neotree reveal<CR>', desc = 'NeoTree reveal', silent = true },
+    {
+      '\\',
+      function()
+        if vim.bo.filetype == 'ministarter' then
+          require('neo-tree.command').execute({ source = 'filesystem', dir = vim.fn.getcwd() })
+          return
+        end
+
+        vim.cmd('Neotree reveal')
+      end,
+      desc = 'NeoTree reveal',
+      silent = true,
+    },
   },
   opts = {
     filesystem = {
