@@ -696,21 +696,10 @@ require("lazy").setup({
 				settings = {
 					nixd = {
 						nixpkgs = {
-							expr = "import (builtins.getFlake (toString ./.)).inputs.nixpkgs { }",
+							expr = "import (builtins.getFlake (builtins.toString ./.)).inputs.nixpkgs { }",
 						},
 						formatting = {
 							command = { "nixfmt" },
-						},
-						options = {
-							nixos = {
-								expr = "(builtins.getFlake (toString ./.)).nixosConfigurations.nixos.options",
-							},
-							darwin = {
-								expr = '(builtins.getFlake (toString ./.)).darwinConfigurations."macbook-pro-m4".options',
-							},
-							home_manager = {
-								expr = "(builtins.getFlake (toString ./.)).nixosConfigurations.nixos.options.home-manager.users.type.getSubOptions []",
-							},
 						},
 					},
 				},
@@ -759,9 +748,7 @@ require("lazy").setup({
 				biome = {
 					require_cwd = true,
 				},
-				oxfmt = {
-					require_cwd = true,
-				},
+				oxfmt = {},
 				prettier = {
 					require_cwd = true,
 				},
@@ -816,7 +803,11 @@ require("lazy").setup({
 					--   end,
 					-- },
 				},
-				opts = {},
+				config = function()
+					require("luasnip.loaders.from_lua").lazy_load({
+						paths = { vim.fn.stdpath("config") .. "/lua/snippets" },
+					})
+				end,
 			},
 			"folke/lazydev.nvim",
 		},
