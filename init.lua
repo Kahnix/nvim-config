@@ -173,27 +173,12 @@ require("lazy").setup({
 	-- with the first argument being the link and the following
 	-- keys can be used to configure plugin behavior/loading/etc.
 	--
-	-- Use `opts = {}` to automatically pass options to a plugin's `setup()` function, forcing the plugin to be loaded.
-	--
 
-	-- Alternatively, use `config = function() ... end` for full control over the configuration.
-	-- If you prefer to call `setup` explicitly, use:
-	--    {
-	--        'lewis6991/gitsigns.nvim',
-	--        config = function()
-	--            require('gitsigns').setup({
-	--                -- Your gitsigns configuration here
-	--            })
-	--        end,
-	--    }
-	--
-	-- Here is a more advanced example where we pass configuration
-	-- options to `gitsigns.nvim`.
-	--
 	-- See `:help gitsigns` to understand what the configuration keys do
 	{ -- Adds git related signs to the gutter, as well as utilities for managing changes
 		"lewis6991/gitsigns.nvim",
 		opts = {
+			current_line_blame = true,
 			signs = {
 				add = { text = "+" },
 				change = { text = "~" },
@@ -265,6 +250,8 @@ require("lazy").setup({
 			-- Document existing key chains
 			spec = {
 				{ "<leader>s", group = "[S]earch" },
+				{ "<leader>d", group = "[D]iffview" },
+				{ "<leader>w", group = "[W]orktree" },
 				{ "<leader>t", group = "[T]oggle" },
 				{ "<leader>h", group = "Git [H]unk", mode = { "n", "v" } },
 			},
@@ -1063,7 +1050,6 @@ require("lazy").setup({
 		-- with nvim-treesitter. You should go explore a few and see what interests you:
 		--
 		--    - Incremental selection: Included, see `:help nvim-treesitter-incremental-selection-mod`
-		--    - Show your current context: https://github.com/nvim-treesitter/nvim-treesitter-context
 		--    - Treesitter + textobjects: https://github.com/nvim-treesitter/nvim-treesitter-textobjects
 	},
 
@@ -1072,6 +1058,9 @@ require("lazy").setup({
 	require("config.plugins.autopairs"),
 	require("config.plugins.neo-tree"),
 	require("config.plugins.gitsigns"),
+	require("config.plugins.diffview"),
+	require("config.plugins.git-worktrees"),
+	require("config.plugins.treesitter-context"),
 
 	-- NOTE: The import below can automatically add your own plugins, configuration, etc from `lua/custom/plugins/*.lua`
 	--    This is the easiest way to modularize your config.
