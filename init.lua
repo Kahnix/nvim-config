@@ -159,6 +159,18 @@ require("lazy").setup({
 	-- NOTE: Plugins can be added with a link (or for a github repo: 'owner/repo' link).
 	{ "NMAC427/guess-indent.nvim", opts = {} }, -- Detect tabstop and shiftwidth automatically
 
+	{ -- Type-check the whole project with its own tsc: the LSP only ever sees open buffers
+		"dmmulroy/tsc.nvim",
+		cmd = { "TSC", "TSCStop", "TSCOpen", "TSCClose" },
+		keys = { { "<leader>ct", "<cmd>TSC<CR>", desc = "[C]heck [T]ypes with tsc" } },
+		opts = {
+			auto_open_qflist = true,
+			auto_focus_qflist = false,
+			-- tsc names the missing symbol; the friendlier rewrite drops it from the message.
+			pretty_errors = false,
+		},
+	},
+
 	{ -- Render Markdown, including Mermaid diagrams, in the default browser
 		"iamcco/markdown-preview.nvim",
 		event = { "BufReadPre", "BufNewFile" },
