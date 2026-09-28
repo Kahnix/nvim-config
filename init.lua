@@ -253,6 +253,7 @@ require("lazy").setup({
 				{ "<leader>d", group = "[D]iffview" },
 				{ "<leader>w", group = "[W]orktree" },
 				{ "<leader>t", group = "[T]oggle" },
+				{ "<leader>g", group = "[G]itHub" },
 				{ "<leader>h", group = "Git [H]unk", mode = { "n", "v" } },
 			},
 		},
@@ -1060,6 +1061,7 @@ require("lazy").setup({
 	require("config.plugins.gitsigns"),
 	require("config.plugins.diffview"),
 	require("config.plugins.git-worktrees"),
+	require("config.plugins.octo"),
 	require("config.plugins.treesitter-context"),
 
 	-- NOTE: The import below can automatically add your own plugins, configuration, etc from `lua/custom/plugins/*.lua`
