@@ -154,6 +154,9 @@ rtp:prepend(lazypath)
 --  To update plugins you can run
 --    :Lazy update
 --
+-- Colorscheme: port of Tern's dark-cavern theme, see colors/dark-cavern.lua
+vim.cmd.colorscheme("dark-cavern")
+
 -- NOTE: Here is where you install your plugins.
 require("lazy").setup({
 	-- NOTE: Plugins can be added with a link (or for a github repo: 'owner/repo' link).
@@ -285,6 +288,8 @@ require("lazy").setup({
 			-- Document existing key chains
 			spec = {
 				{ "<leader>s", group = "[S]earch" },
+				{ "<leader>a", group = "[A]udit" },
+				{ "<leader>b", group = "De[b]ug" },
 				{ "<leader>d", group = "[D]iffview" },
 				{ "<leader>w", group = "[W]orktree" },
 				{ "<leader>t", group = "[T]oggle" },
@@ -653,7 +658,9 @@ require("lazy").setup({
 			--  - settings (table): Override the default settings passed when initializing the server.
 			--        For example, to see the options for `lua_ls`, you could go to: https://luals.github.io/wiki/settings/
 			local servers = {
-				-- clangd = {},
+				clangd = {
+					cmd = { "clangd", "--background-index", "--clang-tidy", "--header-insertion=never" },
+				},
 				gopls = {},
 				html = {},
 				-- pyright = {},
@@ -694,6 +701,8 @@ require("lazy").setup({
 				"prettier",
 				"goimports",
 				"gofumpt",
+				"codelldb",
+				"markdownlint", -- Used by nvim-lint for Markdown
 			})
 			require("mason-tool-installer").setup({ ensure_installed = ensure_installed })
 
@@ -895,29 +904,15 @@ require("lazy").setup({
 		},
 	},
 
-	{ -- You can easily change to a different colorscheme.
-		-- Change the name of the colorscheme plugin below, and then
-		-- change the command in the config to whatever the name of that colorscheme is.
-		--
-		-- If you want to see what colorschemes are already installed, you can use `:Telescope colorscheme`.
-		"rebelot/kanagawa.nvim",
-		priority = 1000, -- Make sure to load this before all the other start plugins.
-		config = function()
-			---@diagnostic disable-next-line: missing-fields
-
-			-- Load the colorscheme here.
-			-- Like many other themes, this one has different styles, and you could load
-			-- any other, such as 'tokyonight-storm', 'tokyonight-moon', or 'tokyonight-day'.
-			vim.cmd.colorscheme("kanagawa-dragon")
-		end,
-	},
-
 	-- Highlight todo, notes, etc in comments
 	{
 		"folke/todo-comments.nvim",
 		event = "VimEnter",
 		dependencies = { "nvim-lua/plenary.nvim" },
-		opts = { signs = false },
+		opts = {
+			signs = false,
+			keywords = { VULN = { color = "error", alt = { "SINK", "AUDIT" } } },
+		},
 	},
 
 	{ -- Collection of various small independent plugins/modules
@@ -999,6 +994,15 @@ require("lazy").setup({
 			local ensure_installed = {
 				"bash",
 				"c",
+				"cpp",
+				"go",
+				"rust",
+				"typescript",
+				"tsx",
+				"json",
+				"yaml",
+				"make",
+				"dockerfile",
 				"css",
 				"diff",
 				"html",
