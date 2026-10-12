@@ -520,6 +520,19 @@ require("lazy").setup({
 					-- or a suggestion from your LSP for this to activate.
 					map("gra", vim.lsp.buf.code_action, "[G]oto Code [A]ction", { "n", "x" })
 
+					-- Apply a quickfix for any diagnostic on the current line, wherever the cursor is.
+					-- The range spans the whole line, so diagnostics anchored past the last character
+					-- (nixd's "expected ;") are reachable too. A single fix applies without a menu.
+					map("grf", function()
+						local row = vim.api.nvim_win_get_cursor(0)[1]
+						local last = math.max(#vim.api.nvim_get_current_line() - 1, 0)
+						vim.lsp.buf.code_action({
+							range = { start = { row, 0 }, ["end"] = { row, last } },
+							context = { only = { "quickfix" } },
+							apply = true,
+						})
+					end, "[F]ix line (quickfix)")
+
 					-- Find references for the word under your cursor.
 					map("grr", require("telescope.builtin").lsp_references, "[G]oto [R]eferences")
 
@@ -963,24 +976,6 @@ require("lazy").setup({
 					starter.gen_hook.aligning("center", "center"),
 				},
 			})
-
-			-- Simple and easy statusline.
-			--  You could remove this setup call if you don't like it,
-			--  and try some other statusline plugin
-			local statusline = require("mini.statusline")
-			-- set use_icons to true if you have a Nerd Font
-			statusline.setup({ use_icons = vim.g.have_nerd_font })
-
-			-- You can configure sections in the statusline by overriding their
-			-- default behavior. For example, here we set the section for
-			-- cursor location to LINE:COLUMN
-			---@diagnostic disable-next-line: duplicate-set-field
-			statusline.section_location = function()
-				return "%2l:%-2v"
-			end
-
-			-- ... and there is more!
-			--  Check out: https://github.com/echasnovski/mini.nvim
 		end,
 	},
 	{ -- Highlight, edit, and navigate code
@@ -1097,6 +1092,7 @@ require("lazy").setup({
 	require("config.plugins.git-worktrees"),
 	require("config.plugins.octo"),
 	require("config.plugins.treesitter-context"),
+	require("config.plugins.lualine"),
 
 	-- NOTE: The import below can automatically add your own plugins, configuration, etc from `lua/custom/plugins/*.lua`
 	--    This is the easiest way to modularize your config.

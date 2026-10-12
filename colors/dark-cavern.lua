@@ -7,38 +7,7 @@ vim.o.background = "dark"
 vim.o.termguicolors = true
 vim.g.colors_name = "dark-cavern"
 
-local c = {
-	-- Tern theme vars
-	cave_black = "#0E0F12",
-	limestone_dark = "#14181D",
-	stone_mid = "#1D2229",
-	slab_gray = "#232A33",
-	stalactite = "#2F3945",
-	crystal_blue = "#5FB2D8",
-	vein_blue = "#87C6E6",
-	mineral_green = "#6FB86A",
-	amber = "#D9A441",
-	error_red = "#E06C75",
-	muted_gray = "#A5ADBA",
-	dim_gray = "#6B7381",
-	-- Tern terminal section
-	bg = "#0B0D10",
-	fg = "#C9D1DB",
-	chrome = "#08090B",
-	purple = "#B88AD8",
-	teal = "#56C2B8",
-	bright_red = "#EF9097",
-	bright_green = "#94D090",
-	bright_yellow = "#ECC46E",
-	bright_purple = "#D2AEEA",
-	bright_teal = "#86DCD2",
-	white = "#E2E7EE",
-	-- Tern tool backgrounds (used for diffs)
-	green_bg = "#131B16",
-	red_bg = "#221416",
-	custom_bg = "#1A1F26",
-	none = "NONE",
-}
+local c = require("dark-cavern.palette")
 
 -- Terminal buffers use Tern's exact ANSI palette.
 local ansi = {
@@ -334,18 +303,6 @@ local groups = {
 	TreesitterContextLineNumber = { fg = c.dim_gray, bg = c.limestone_dark },
 	TreesitterContextBottom = { sp = c.stalactite, underline = true },
 
-	-- mini.statusline (Tern statusLine* mapping)
-	MiniStatuslineModeNormal = { fg = c.bg, bg = c.crystal_blue, bold = true },
-	MiniStatuslineModeInsert = { fg = c.bg, bg = c.mineral_green, bold = true },
-	MiniStatuslineModeVisual = { fg = c.bg, bg = c.amber, bold = true },
-	MiniStatuslineModeReplace = { fg = c.bg, bg = c.error_red, bold = true },
-	MiniStatuslineModeCommand = { fg = c.bg, bg = c.vein_blue, bold = true },
-	MiniStatuslineModeOther = { fg = c.bg, bg = c.teal, bold = true },
-	MiniStatuslineDevinfo = { fg = c.muted_gray, bg = c.stone_mid },
-	MiniStatuslineFilename = { fg = c.crystal_blue, bg = c.chrome },
-	MiniStatuslineFileinfo = { fg = c.muted_gray, bg = c.stone_mid },
-	MiniStatuslineInactive = { fg = c.dim_gray, bg = c.chrome },
-
 	-- mini.starter
 	MiniStarterHeader = { fg = c.crystal_blue, bold = true },
 	MiniStarterFooter = { fg = c.dim_gray, italic = true },
@@ -408,7 +365,6 @@ if vim.g.transparent ~= false then
 		"Normal", "NormalNC", "NormalFloat", "FloatBorder", "FloatTitle", "FloatFooter",
 		"SignColumn", "FoldColumn", "EndOfBuffer", "LineNr", "CursorLineNr",
 		"StatusLine", "StatusLineNC", "TabLine", "TabLineFill",
-		"MiniStatuslineFilename", "MiniStatuslineInactive",
 		"NeoTreeNormal", "NeoTreeNormalNC", "NeoTreeEndOfBuffer", "NeoTreeWinSeparator",
 		"TreesitterContext", "TreesitterContextLineNumber", "SnacksBackdrop",
 	}) do
