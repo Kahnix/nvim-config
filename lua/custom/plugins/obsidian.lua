@@ -1,4 +1,7 @@
-local vault = vim.fn.expand '~/Library/Mobile Documents/iCloud~md~obsidian/Documents/Notes'
+-- macOS reads the iCloud vault directly; Linux hosts get it from Syncthing.
+local vault = vim.fn.expand(
+  vim.fn.has 'mac' == 1 and '~/Library/Mobile Documents/iCloud~md~obsidian/Documents/Notes' or '~/Notes'
+)
 
 -- Creates DSA/Solutions/<id>. <title>.md from the "Leetcode Problem" template
 -- for the problem open in the current leetcode.nvim tab.

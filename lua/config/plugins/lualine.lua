@@ -1,4 +1,4 @@
--- Bubble-style statusline. Colors come from lua/lualine/themes/dark-cavern.lua,
+-- Bubble-style statusline. Colors come from lua/lualine/themes/darkmatter.lua,
 -- which lualine picks up automatically via `theme = "auto"` + vim.g.colors_name.
 local nf = vim.g.have_nerd_font
 
@@ -27,7 +27,7 @@ return {
 	"nvim-lualine/lualine.nvim",
 	dependencies = { "nvim-tree/nvim-web-devicons" },
 	config = function()
-		local c = require("dark-cavern.palette")
+		local c = require("darkmatter.palette")
 
 		require("lualine").setup({
 			options = {
@@ -54,9 +54,9 @@ return {
 						source = gitsigns_diff,
 						symbols = nf and { added = " ", modified = " ", removed = " " } or nil,
 						diff_color = {
-							added = { fg = c.mineral_green },
-							modified = { fg = c.amber },
-							removed = { fg = c.error_red },
+							added = { fg = c.info },
+							modified = { fg = c.accent },
+							removed = { fg = c.error },
 						},
 					},
 				},
@@ -72,17 +72,17 @@ return {
 						"diagnostics",
 						symbols = nf and { error = "󰅚 ", warn = "󰀪 ", info = "󰋽 ", hint = "󰌶 " } or nil,
 						diagnostics_color = {
-							error = { fg = c.error_red },
-							warn = { fg = c.amber },
-							info = { fg = c.crystal_blue },
-							hint = { fg = c.teal },
+							error = { fg = c.error },
+							warn = { fg = c.accent_soft },
+							info = { fg = c.info },
+							hint = { fg = c.text_dim },
 						},
 					},
 				},
 				lualine_x = {
-					{ macro_recording, color = { fg = c.error_red, gui = "bold" } },
-					{ "searchcount", color = { fg = c.amber } },
-					{ lsp_clients, icon = "", color = { fg = c.dim_gray } },
+					{ macro_recording, color = { fg = c.error, gui = "bold" } },
+					{ "searchcount", color = { fg = c.accent } },
+					{ lsp_clients, icon = "", color = { fg = c.text_dim } },
 				},
 				lualine_y = { "progress" },
 				lualine_z = {

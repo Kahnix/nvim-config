@@ -154,14 +154,45 @@ rtp:prepend(lazypath)
 --  To update plugins you can run
 --    :Lazy update
 --
--- Colorscheme: port of Tern's dark-cavern theme, see colors/dark-cavern.lua
-vim.cmd.colorscheme("dark-cavern")
 
 -- NOTE: Here is where you install your plugins.
 require("lazy").setup({
 	-- NOTE: Plugins can be added with a link (or for a github repo: 'owner/repo' link).
 	{ "NMAC427/guess-indent.nvim", opts = {} }, -- Detect tabstop and shiftwidth automatically
 
+	--Colorscheme
+	{
+		"stevedylandev/darkmatter-nvim",
+		lazy = false,
+		priority = 1000,
+		config = function()
+			vim.api.nvim_create_autocmd("ColorScheme", {
+				callback = function()
+					for _, name in ipairs({
+						"Normal",
+						"NormalNC",
+						"NormalFloat",
+						"FloatBorder",
+						"SignColumn",
+						"FoldColumn",
+						"EndOfBuffer",
+						"LineNr",
+						"CursorLineNr",
+						"StatusLine",
+						"StatusLineNC",
+						"TabLine",
+						"TabLineFill",
+						"NeoTreeNormal",
+						"NeoTreeNormalNC",
+						"NeoTreeEndOfBuffer",
+					}) do
+						vim.api.nvim_set_hl(0, name, { bg = "NONE" })
+					end
+				end,
+			})
+			vim.cmd.colorscheme("darkmatter")
+		end,
+	},
 	{ -- Type-check the whole project with its own tsc: the LSP only ever sees open buffers
 		"dmmulroy/tsc.nvim",
 		cmd = { "TSC", "TSCStop", "TSCOpen", "TSCClose" },
@@ -377,7 +408,9 @@ require("lazy").setup({
 			local builtin = require("telescope.builtin")
 			vim.keymap.set("n", "<leader>sh", builtin.help_tags, { desc = "[S]earch [H]elp" })
 			vim.keymap.set("n", "<leader>sk", builtin.keymaps, { desc = "[S]earch [K]eymaps" })
-			vim.keymap.set("n", "<leader>sf", builtin.find_files, { desc = "[S]earch [F]iles" })
+			vim.keymap.set("n", "<leader>sf", function()
+				builtin.find_files({ hidden = true, file_ignore_patterns = { "^%.git/" } })
+			end, { desc = "[S]earch [F]iles (incl. hidden)" })
 			vim.keymap.set("n", "<leader>ss", builtin.builtin, { desc = "[S]earch [S]elect Telescope" })
 			vim.keymap.set("n", "<leader>sw", builtin.grep_string, { desc = "[S]earch current [W]ord" })
 			vim.keymap.set("n", "<leader>sg", builtin.live_grep, { desc = "[S]earch by [G]rep" })
@@ -511,6 +544,11 @@ require("lazy").setup({
 						mode = mode or "n"
 						vim.keymap.set(mode, keys, func, { buffer = event.buf, desc = "LSP: " .. desc })
 					end
+
+					-- Hover docs in a bordered float; render-markdown.nvim renders the markdown.
+					map("K", function()
+						vim.lsp.buf.hover({ border = "rounded", max_width = 90, max_height = 30 })
+					end, "Hover Documentation")
 
 					-- Rename the variable under your cursor.
 					--  Most Language Servers support renaming across files, etc.
