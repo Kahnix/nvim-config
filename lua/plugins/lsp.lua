@@ -1,7 +1,8 @@
 -- Mason installs every language server and tool, so this config works on a
 -- machine with no Nix: `:MasonInstall` and the list below are the only source.
 -- nixd is not in the mason registry, so Nix files use nixd when it is on PATH
--- (this repo's hosts) and nil_ls otherwise.
+-- (this repo's hosts) and nil_ls otherwise; mason builds nil from source, so
+-- that fallback needs `cargo`.
 local has_nixd = vim.fn.executable("nixd") == 1
 
 return {
