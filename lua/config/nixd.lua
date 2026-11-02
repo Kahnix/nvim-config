@@ -1,4 +1,4 @@
--- Per-project nixd settings.
+-- Per-project nixd settings (used by lua/plugins/lsp.lua).
 --
 -- nixd only offers option completion (programs.git.settings.<C-Space>) for option sets it is told
 -- about. The set differs per repository, so it is computed from the project root when the server
