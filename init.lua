@@ -4,6 +4,7 @@ vim.g.have_nerd_font = true
 
 -- [[ Options ]]
 vim.o.number = true
+vim.o.relativenumber = true
 vim.o.mouse = "a"
 vim.o.showmode = false -- lualine shows it
 vim.schedule(function()
