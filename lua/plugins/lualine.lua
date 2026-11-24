@@ -1,5 +1,5 @@
--- Bubble-style statusline. Colors come from lua/lualine/themes/darkmatter.lua,
--- which lualine picks up automatically via `theme = "auto"` + vim.g.colors_name.
+-- Bubble-style statusline. Section colors come from lua/lualine/themes/<colorscheme>.lua, which
+-- lualine picks up via `theme = "auto"`; component colors follow the colorscheme's highlight groups.
 local nf = vim.g.have_nerd_font
 
 local function lsp_clients()
@@ -27,7 +27,11 @@ return {
 	"nvim-lualine/lualine.nvim",
 	dependencies = { "nvim-tree/nvim-web-devicons" },
 	config = function()
-		local c = require("darkmatter.palette")
+		local function fg(group)
+			return function()
+				return { fg = Snacks.util.color(group) }
+			end
+		end
 
 		require("lualine").setup({
 			options = {
@@ -53,11 +57,6 @@ return {
 						"diff",
 						source = gitsigns_diff,
 						symbols = nf and { added = " ", modified = " ", removed = " " } or nil,
-						diff_color = {
-							added = { fg = c.info },
-							modified = { fg = c.accent },
-							removed = { fg = c.error },
-						},
 					},
 				},
 				lualine_c = {
@@ -71,23 +70,17 @@ return {
 							unnamed = "[No Name]",
 							newfile = "[New]",
 						},
-						color = { fg = c.fg },
+						color = fg("Normal"),
 					},
 					{
 						"diagnostics",
 						symbols = nf and { error = "󰅚 ", warn = "󰀪 ", info = "󰋽 ", hint = "󰌶 " } or nil,
-						diagnostics_color = {
-							error = { fg = c.error },
-							warn = { fg = c.accent_soft },
-							info = { fg = c.info },
-							hint = { fg = c.text_dim },
-						},
 					},
 				},
 				lualine_x = {
-					{ macro_recording, color = { fg = c.error, gui = "bold" } },
-					{ "searchcount", color = { fg = c.accent } },
-					{ lsp_clients, icon = "", color = { fg = c.text_dim } },
+					{ macro_recording, color = fg("DiagnosticError") },
+					{ "searchcount", color = fg("Special") },
+					{ lsp_clients, icon = "", color = fg("Comment") },
 				},
 				lualine_y = { "progress" },
 				lualine_z = {

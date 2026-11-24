@@ -73,47 +73,55 @@ if not vim.uv.fs_stat(lazypath) then
 end
 vim.opt.rtp:prepend(lazypath)
 
+-- Transparent background for every colorscheme: the terminal's own background shows through.
+vim.api.nvim_create_autocmd("ColorScheme", {
+	group = vim.api.nvim_create_augroup("config-transparent", { clear = true }),
+	callback = function()
+		for _, name in ipairs({
+			"Normal",
+			"NormalNC",
+			"NormalFloat",
+			"FloatBorder",
+			"SignColumn",
+			"FoldColumn",
+			"EndOfBuffer",
+			"LineNr",
+			"CursorLineNr",
+			"StatusLine",
+			"StatusLineNC",
+			"TabLine",
+			"TabLineFill",
+			"NeoTreeNormal",
+			"NeoTreeNormalNC",
+			"NeoTreeEndOfBuffer",
+		}) do
+			-- Only the background is dropped; the rest of the group stays as the colorscheme set it.
+			local hl = vim.api.nvim_get_hl(0, { name = name, link = false })
+			hl.bg = nil
+			vim.api.nvim_set_hl(0, name, hl)
+		end
+	end,
+})
+
 require("lazy").setup({
 	{ "NMAC427/guess-indent.nvim", opts = {} },
 
 	{
-		"stevedylandev/darkmatter-nvim",
+		"D0nw0r/dark2026.nvim",
 		lazy = false,
 		priority = 1000,
 		config = function()
-			-- Transparent background: the terminal's own background shows through.
-			vim.api.nvim_create_autocmd("ColorScheme", {
-				callback = function()
-					for _, name in ipairs({
-						"Normal",
-						"NormalNC",
-						"NormalFloat",
-						"FloatBorder",
-						"SignColumn",
-						"FoldColumn",
-						"EndOfBuffer",
-						"LineNr",
-						"CursorLineNr",
-						"StatusLine",
-						"StatusLineNC",
-						"TabLine",
-						"TabLineFill",
-						"NeoTreeNormal",
-						"NeoTreeNormalNC",
-						"NeoTreeEndOfBuffer",
-					}) do
-						vim.api.nvim_set_hl(0, name, { bg = "NONE" })
-					end
-				end,
-			})
-			vim.cmd.colorscheme("darkmatter")
+			vim.cmd.colorscheme("dark2026")
 		end,
 	},
+	-- Still available through `:colorscheme darkmatter`; lazy.nvim loads it on demand.
+	{ "stevedylandev/darkmatter-nvim", lazy = true },
 
 	{
 		"folke/which-key.nvim",
 		event = "VimEnter",
 		opts = {
+			preset = "helix",
 			delay = 0,
 			spec = {
 				{ "<leader>s", group = "[S]earch" },
@@ -276,26 +284,14 @@ require("lazy").setup({
 						return
 					end
 
-					-- Highlight references of the symbol under the cursor while it rests there.
+					-- snacks.words highlights the references; these jump between them.
 					if client:supports_method("textDocument/documentHighlight", event.buf) then
-						local group = vim.api.nvim_create_augroup("config-lsp-highlight", { clear = false })
-						vim.api.nvim_create_autocmd({ "CursorHold", "CursorHoldI" }, {
-							buffer = event.buf,
-							group = group,
-							callback = vim.lsp.buf.document_highlight,
-						})
-						vim.api.nvim_create_autocmd({ "CursorMoved", "CursorMovedI" }, {
-							buffer = event.buf,
-							group = group,
-							callback = vim.lsp.buf.clear_references,
-						})
-						vim.api.nvim_create_autocmd("LspDetach", {
-							group = vim.api.nvim_create_augroup("config-lsp-detach", { clear = true }),
-							callback = function(event2)
-								vim.lsp.buf.clear_references()
-								vim.api.nvim_clear_autocmds({ group = "config-lsp-highlight", buffer = event2.buf })
-							end,
-						})
+						map("]]", function()
+							Snacks.words.jump(vim.v.count1)
+						end, "Next reference")
+						map("[[", function()
+							Snacks.words.jump(-vim.v.count1)
+						end, "Previous reference")
 					end
 
 					if client:supports_method("textDocument/inlayHint", event.buf) then
