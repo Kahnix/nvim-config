@@ -3,18 +3,63 @@ return {
 	{
 		"mfussenegger/nvim-dap",
 		keys = {
-			{ "<F5>", function() require("dap").continue() end, desc = "Debug: Start/Continue" },
-			{ "<F10>", function() require("dap").step_over() end, desc = "Debug: Step Over" },
-			{ "<F11>", function() require("dap").step_into() end, desc = "Debug: Step Into" },
-			{ "<F12>", function() require("dap").step_out() end, desc = "Debug: Step Out" },
-			{ "<leader>bb", function() require("dap").toggle_breakpoint() end, desc = "[B]reakpoint toggle" },
+			{
+				"<F5>",
+				function()
+					require("dap").continue()
+				end,
+				desc = "Debug: Start/Continue",
+			},
+			{
+				"<F10>",
+				function()
+					require("dap").step_over()
+				end,
+				desc = "Debug: Step Over",
+			},
+			{
+				"<F11>",
+				function()
+					require("dap").step_into()
+				end,
+				desc = "Debug: Step Into",
+			},
+			{
+				"<F12>",
+				function()
+					require("dap").step_out()
+				end,
+				desc = "Debug: Step Out",
+			},
+			{
+				"<leader>bb",
+				function()
+					require("dap").toggle_breakpoint()
+				end,
+				desc = "[B]reakpoint toggle",
+			},
 			{
 				"<leader>bc",
-				function() require("dap").set_breakpoint(vim.fn.input("Condition: ")) end,
+				function()
+					require("dap").set_breakpoint(vim.fn.input("Condition: "))
+				end,
 				desc = "[B]reakpoint [C]onditional",
 			},
-			{ "<leader>br", function() require("dap").repl.toggle() end, desc = "Debug [R]EPL (gdb/lldb cmds)" },
-			{ "<leader>bh", function() require("dap.ui.widgets").hover() end, mode = { "n", "v" }, desc = "Debug [H]over value" },
+			{
+				"<leader>br",
+				function()
+					require("dap").repl.toggle()
+				end,
+				desc = "Debug [R]EPL (gdb/lldb cmds)",
+			},
+			{
+				"<leader>bh",
+				function()
+					require("dap.ui.widgets").hover()
+				end,
+				mode = { "n", "v" },
+				desc = "Debug [H]over value",
+			},
 			{
 				"<leader>bs",
 				function()
@@ -23,7 +68,13 @@ return {
 				end,
 				desc = "Debug [S]copes",
 			},
-			{ "<leader>bq", function() require("dap").terminate() end, desc = "Debug [Q]uit" },
+			{
+				"<leader>bq",
+				function()
+					require("dap").terminate()
+				end,
+				desc = "Debug [Q]uit",
+			},
 		},
 		config = function()
 			local dap = require("dap")

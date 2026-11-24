@@ -65,7 +65,12 @@ return {
 					{
 						"filename",
 						path = 1,
-						symbols = { modified = "●", readonly = nf and "" or "[RO]", unnamed = "[No Name]", newfile = "[New]" },
+						symbols = {
+							modified = "●",
+							readonly = nf and "" or "[RO]",
+							unnamed = "[No Name]",
+							newfile = "[New]",
+						},
 						color = { fg = c.fg },
 					},
 					{
